@@ -10,6 +10,7 @@ export default function StartScreen() {
     const [email, setEmail] = React.useState("");
     const [phoneNumber, setPhoneNumber] = React.useState("");
     const [notRobot, setNotRobot] = React.useState(false);
+    const [formValid, setFormValid] = React.useState(false);
 
     const handleNameChange = (text) => {
         const onlyLetters = text.replace(/[^A-Za-z]/g, "");
@@ -36,14 +37,34 @@ export default function StartScreen() {
         const lastDigit = digits.charAt(digits.length - 1);
         return !(lastDigit === "0" || lastDigit === "1");
     };
-    const checkFormValidity = () => {
-        return checkNameValidity(name) && checkEmailValidity(email) && checkPhoneNumberValidity(phoneNumber);
-    }
+    const handleFormSubmission = () => {
+        if (formValid) {
+            // Perform the form submission logic here
+            console.log("Form submitted successfully!");
+            // You can clear the form or navigate to another screen
+        } else {
+            console.log("Form is invalid. Please correct the errors.");
+        }
+    };
     const clearForm = () => {
         setName("");
         setEmail("");
         setPhoneNumber("");
+        setNotRobot(false);
     }
+
+    React.useEffect(() => {
+        if (
+            checkNameValidity(name) &&
+            checkEmailValidity(email) &&
+            checkPhoneNumberValidity(phoneNumber) &&
+            notRobot
+        ) {
+            setFormValid(true);
+        } else {
+            setFormValid(false);
+        }
+    }, [name, email, phoneNumber, notRobot]);
 
     return (
         <View>
@@ -99,10 +120,10 @@ export default function StartScreen() {
                         </Text>
                     )}
                 </View>
-                <CheckRobotBox value={notRobot} />
+                <CheckRobotBox value={notRobot} click={setNotRobot}/>
                 <View style={styles.buttonContainer}>
                     <CustomizedButton title="Reset" onPress={clearForm} backgroundColor={Colors.primary}/>
-                    <CustomizedButton title="Register" onPress={checkFormValidity} disabled={true} />
+                    <CustomizedButton title="Register" onPress={handleFormSubmission} disabled={!formValid}/>
                 </View>
             </View>
         </View>

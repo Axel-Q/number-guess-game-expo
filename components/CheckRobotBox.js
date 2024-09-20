@@ -2,10 +2,10 @@ import React from "react";
 import {Text, View, StyleSheet} from "react-native";
 import {CheckBox} from "react-native-elements";
 
-export default function CheckRobotBox() {
+export default function CheckRobotBox({value, click}) {
     return (
         <View style={{flexDirection: 'row'}}>
-            <CheckBox/>
+            <CheckBox checked={value} onPress={click}/>
             <Text style={styles.text}>I am not a robot</Text>
         </View>
     );
