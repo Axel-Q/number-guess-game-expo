@@ -1,7 +1,7 @@
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, View} from 'react-native';
 import StartScreen from "./screens/StartScreen";
-import colors from "./helperFile/colors";
+import Colors from "./helperFile/colors";
 
 export default function App() {
     return (
@@ -15,7 +15,7 @@ export default function App() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.blue,
+        backgroundColor: Colors.blue,
         alignItems: 'center',
         justifyContent: 'center',
     },

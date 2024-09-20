@@ -1,34 +1,33 @@
 import React from "react";
-import {StatusBar, View, Text, StyleSheet, TextInput} from "react-native";
-import colors from "../helperFile/colors";
+import {StatusBar, View, Text, StyleSheet, TextInput, Button} from "react-native";
+import Colors from "../helperFile/colors";
+import CustomizedButton from "../components/CustomizedButton";
+import {CheckBox} from "react-native-elements";
+import CheckRobotBox from "../components/CheckRobotBox";
 
 export default function StartScreen() {
     const [name, setName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [phoneNumber, setPhoneNumber] = React.useState("");
+    const [notRobot, setNotRobot] = React.useState(false);
 
     const handleNameChange = (text) => {
         const onlyLetters = text.replace(/[^A-Za-z]/g, "");
         setName(onlyLetters);
     };
-
     const handleEmailChange = (text) => {
         setEmail(text);
     };
-
     const handlePhoneNumberChange = (text) => {
         setPhoneNumber(text);
     };
-
     const checkNameValidity = (name) => {
         return name.length >= 2;
     };
-
     const checkEmailValidity = (email) => {
-        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\..[a-zA-Z]{2,}$/;
         return emailPattern.test(email);
     };
-
     const checkPhoneNumberValidity = (phoneNumber) => {
         const digits = phoneNumber.replace(/\D/g, "");
         if (digits.length !== 10) {
@@ -37,12 +36,22 @@ export default function StartScreen() {
         const lastDigit = digits.charAt(digits.length - 1);
         return !(lastDigit === "0" || lastDigit === "1");
     };
+    const checkFormValidity = () => {
+        return checkNameValidity(name) && checkEmailValidity(email) && checkPhoneNumberValidity(phoneNumber);
+    }
+    const clearForm = () => {
+        setName("");
+        setEmail("");
+        setPhoneNumber("");
+    }
 
     return (
-        <View style={styles.container}>
-            <StatusBar style="auto"/>
+        <View>
+            <Text style={styles.title}>Welcome to Axel's App</Text>
             <View style={styles.card}>
+                <StatusBar style="auto"/>
                 <View style={styles.inputContainer}>
+                    <Text>Name</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Input your Name here"
@@ -58,6 +67,7 @@ export default function StartScreen() {
                 </View>
 
                 <View style={styles.inputContainer}>
+                    <Text>Email</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Input your Email here"
@@ -71,8 +81,8 @@ export default function StartScreen() {
                         <Text style={styles.errorText}>Please enter a valid email</Text>
                     )}
                 </View>
-
                 <View style={styles.inputContainer}>
+                    <Text>Phone Number</Text>
                     <TextInput
                         style={styles.input}
                         placeholder="Input your Phone Num here"
@@ -89,19 +99,25 @@ export default function StartScreen() {
                         </Text>
                     )}
                 </View>
+                <CheckRobotBox value={notRobot} />
+                <View style={styles.buttonContainer}>
+                    <CustomizedButton title="Reset" onPress={clearForm} backgroundColor={Colors.primary}/>
+                    <CustomizedButton title="Register" onPress={checkFormValidity} disabled={true} />
+                </View>
             </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
+    title: {
+        color: Colors.purple,
+        fontSize: 30,
+        fontWeight: 'bold',
+        marginBottom: 40,
     },
     card: {
-        backgroundColor: colors.gray,
+        backgroundColor: Colors.gray,
         borderRadius: 15,
         // Shadow for iOS
         shadowColor: "#000",
@@ -110,22 +126,25 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         // Elevation for Android
         elevation: 15,
+        height: 500,
+        width: 300,
+        paddingHorizontal: 20,
+        justifyContent: 'center',
     },
     inputContainer: {
-        width: "100%",
-        alignItems: "center",
-        justifyContent: "center",
-        marginVertical: 10,
+        marginVertical: 20,
     },
     input: {
-        width: "80%",
-        borderBottomColor: "purple",
-        borderBottomWidth: 2,
-        fontSize: 16,
+        borderBottomColor: Colors.purple,
+        borderBottomWidth: 3,
     },
     errorText: {
-        color: "red",
+        color: Colors.red,
         marginTop: 5,
-        fontSize: 14,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        marginVertical: 10,
     },
 });
