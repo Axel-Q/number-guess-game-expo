@@ -4,44 +4,24 @@ import StartScreen from "./screens/StartScreen";
 import Colors from "./helperFile/colors";
 import {LinearGradient} from "expo-linear-gradient";
 import React from "react";
+import GameScreen from "./screens/GameScreen";
+import Confirm from "./screens/Confirm";
+
 
 export default function App() {
-    const [name, setName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [phoneNumber, setPhoneNumber] = React.useState("");
-    const [startVisible, setStartVisible] = React.useState(true);
-    const [confirmVisible, setConfirmVisible] = React.useState(false);
+    const [user, setUser] = React.useState({name: "", email: "", phoneNumber: ""});
     const [gameVisible, setGameVisible] = React.useState(false);
-    const [gameSupported, setGameSupported] = React.useState(false);
-
-    const handleStart = (name, phoneNumber, email) => {
-        setName(name);
-        setEmail(email);
-        setPhoneNumber(phoneNumber);
-        setStartVisible(false);
-        setConfirmVisible(true);
-    }
-
-    const handleBackToStart = () => {
-        setStartVisible(true);
-        setConfirmVisible(false);
-    }
-
-    const handleJumpToGame = () => {
-        setConfirmVisible(false);
+    const handleStart = (name, email, phoneNumber) => {
+        setUser({name: name, email: email, phoneNumber: phoneNumber});
         setGameVisible(true);
-        setGameSupported(true);
     }
-
-    const handleRestartGame = () => {
-        setName("");
-        setEmail("");
+    const handleRestart = () => {
+        setUser({name: "", email: "", phoneNumber: ""});
         setGameVisible(false);
-        setGameSupported(false);
-        setConfirmVisible(false);
-        setStartVisible(true);
     }
-
+    const handleNewGame = () => {
+        setGameVisible(false);
+    }
 
     return (
         <View style={styles.container}>
@@ -49,7 +29,10 @@ export default function App() {
                             style={styles.base}/>
             <StatusBar style="auto"/>
             <View>
-                {!gameVisible && (<StartScreen onStart={handleStart} visible={startVisible}/>)}
+                if (gameVisible) {
+                <GameScreen user={user} handleRestart={handleRestart} handleNewGame={handleNewGame}/>
+            } else {
+                <StartScreen handleStart={handleStart}/>}
             </View>
         </View>
     )
