@@ -9,6 +9,7 @@ const Colors = {
     disabled: 'rgba(255,255,255,0.5)',
     gradient: ['rgba(0,0,0,0.7)', 'transparent'],
     yellow: 'rgb(255,220,0)',
+    blueGreen: 'rgb(0,151,131)',
 }
 
 export default Colors
