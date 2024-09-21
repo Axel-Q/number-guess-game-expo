@@ -12,7 +12,6 @@ export default function StartScreen({handleStart}) {
     const [nameError, setNameError] = React.useState("");
     const [emailError, setEmailError] = React.useState("");
     const [phoneNumberError, setPhoneNumberError] = React.useState("");
-    const [formValid, setFormValid] = React.useState(false);
     const [buttonDisabled, setButtonDisabled] = React.useState(true);
     const handleNameChange = (text) => {
         setName(text);

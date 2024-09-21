@@ -16,29 +16,36 @@ export default function App() {
         setUser({name: name, email: email, phoneNumber: phoneNumber});
         setConfirmVisible(true);
     }
-    const handleRestart = () => {
+    const onRestart = () => {
         setUser({name: "", email: "", phoneNumber: ""});
+        setConfirmVisible(false);
         setGameVisible(false);
     }
-    const handleNewGame = () => {
-        setGameVisible(false);
-    }
+
 
     return (
 
         <LinearGradientBackground>
             <View>
-                {!gameVisible && (
-                    <StartScreen handleStart={handleStart}></StartScreen>
-                )}
-                {confirmVisible && (
-                    <Confirm name={user.name} email={user.email} phoneNumber={user.phoneNumber}
-                             handleBackToStart={() => setConfirmVisible(false)}
-                             handleJumpToGame={() => {
-                                 setConfirmVisible(false);
-                                 setGameVisible(true);
-                             }}/>
-                )}
+                <GameScreen onRestart={onRestart}/>
+                {/*{!confirmVisible && !gameVisible && (*/}
+                {/*    <StartScreen handleStart={handleStart} />*/}
+                {/*)}*/}
+                {/*{confirmVisible && !gameVisible && (*/}
+                {/*    <Confirm*/}
+                {/*        name={user.name}*/}
+                {/*        email={user.email}*/}
+                {/*        phoneNumber={user.phoneNumber}*/}
+                {/*        handleBackToStart={() => setConfirmVisible(false)}*/}
+                {/*        handleJumpToGame={() => {*/}
+                {/*            setConfirmVisible(false);*/}
+                {/*            setGameVisible(true);*/}
+                {/*        }}*/}
+                {/*    />*/}
+                {/*)}*/}
+                {/*{gameVisible && (*/}
+                {/*    <GameScreen onRestart={handleRestart} />*/}
+                {/*)}*/}
             </View>
         </LinearGradientBackground>
 
@@ -47,6 +54,5 @@ export default function App() {
         ;
 }
 
-const styles = StyleSheet.create({});
 
 
