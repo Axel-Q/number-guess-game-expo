@@ -7,6 +7,8 @@ const Colors = {
     white: 'rgb(255,255,255)',
     secondary: 'rgb(0,0,255)',
     disabled: 'rgba(255,255,255,0.5)',
+    gradient: ['rgba(0,0,0,0.7)', 'transparent'],
+    yellow: 'rgb(255,220,0)',
 }
 
 export default Colors

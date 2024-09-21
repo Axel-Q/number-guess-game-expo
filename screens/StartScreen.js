@@ -39,9 +39,7 @@ export default function StartScreen() {
     };
     const handleFormSubmission = () => {
         if (formValid) {
-            // Perform the form submission logic here
             console.log("Form submitted successfully!");
-            // You can clear the form or navigate to another screen
         } else {
             console.log("Form is invalid. Please correct the errors.");
         }
@@ -55,9 +53,6 @@ export default function StartScreen() {
 
     React.useEffect(() => {
         if (
-            checkNameValidity(name) &&
-            checkEmailValidity(email) &&
-            checkPhoneNumberValidity(phoneNumber) &&
             notRobot
         ) {
             setFormValid(true);
