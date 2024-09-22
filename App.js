@@ -28,14 +28,14 @@ export default function App() {
         <LinearGradientBackground>
             <View>
                 {!confirmVisible && !gameVisible && (
-                    <StartScreen handleStart={handleStart} />
+                    <StartScreen handleStart={handleStart} user={user}/>
                 )}
                 {confirmVisible && !gameVisible && (
                     <Confirm
                         name={user.name}
                         email={user.email}
                         phoneNumber={user.phoneNumber}
-                        handleBackToStart={() => setConfirmVisible(false)}
+                        handleBackToStart={() => {setConfirmVisible(false)}}
                         handleJumpToGame={() => {
                             setConfirmVisible(false);
                             setGameVisible(true);

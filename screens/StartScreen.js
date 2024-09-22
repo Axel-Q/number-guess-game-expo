@@ -1,13 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import {StatusBar, View, Text, StyleSheet, TextInput, Button} from "react-native";
 import Colors from "../helperFile/colors";
 import CustomizedButton from "../components/CustomizedButton";
 import CheckRobotBox from "../components/CheckRobotBox";
 
-export default function StartScreen({handleStart}) {
-    const [name, setName] = React.useState("");
-    const [email, setEmail] = React.useState("");
-    const [phoneNumber, setPhoneNumber] = React.useState("");
+export default function StartScreen({handleStart, user}) {
+    const [name, setName] = useState(user.name || "");
+    const [email, setEmail] = useState(user.email || "");
+    const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || "");
     const [notRobot, setNotRobot] = React.useState(false);
     const [nameError, setNameError] = React.useState("");
     const [emailError, setEmailError] = React.useState("");

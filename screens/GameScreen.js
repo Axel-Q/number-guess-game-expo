@@ -16,8 +16,10 @@ import {
 import LinearGradientBackground from "../components/LinearGradientBackground";
 import React, {useState, useEffect, useRef, useCallback} from "react";
 
+const multiplesOfNine = [9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99];
 const getRandomNum = () => {
-    return 3;
+    const randomIndex = Math.floor(Math.random() * multiplesOfNine.length);
+    return multiplesOfNine[randomIndex];
 };
 
 export default function GameScreen({onRestart}) {
@@ -192,7 +194,7 @@ export default function GameScreen({onRestart}) {
             if (!guessResultDisplay && !isGameOver) {
                 return (
                     <View style={styles.card}>
-                        <Text style={styles.title}>Guess the Number</Text>
+                        <Text style={styles.title}>Guess the number between 1 and 100. That is multiple of 9</Text>
                         <TextInput
                             style={styles.input}
                             keyboardType="number-pad"
