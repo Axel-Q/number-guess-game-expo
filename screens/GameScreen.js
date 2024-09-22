@@ -196,7 +196,8 @@ export default function GameScreen({onRestart}) {
                     <View style={styles.card}>
                         <Text style={styles.title}>Guess the number between 1 and 100. That is multiple of 9</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, styles.inputUnderline]}
+                            placeholder="Enter your guess"
                             keyboardType="number-pad"
                             maxLength={3}
                             onChangeText={handleInputChange}
@@ -299,6 +300,11 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: Colors.primary,
         textAlign: "center",
+    },
+    inputUnderline: {
+        borderBottomWidth: 2, // Thickness of the underline
+        borderBottomColor: 'blue', // Color of the underline
+        width: 200, // Set width differently for iOS and Android
     },
     infoText: {
         fontSize: 16,
