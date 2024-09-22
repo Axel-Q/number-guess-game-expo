@@ -17,7 +17,7 @@ import LinearGradientBackground from "../components/LinearGradientBackground";
 import React, {useState, useEffect, useRef, useCallback} from "react";
 
 const getRandomNum = () => {
-    return 2;
+    return 3;
 };
 
 export default function GameScreen({onRestart}) {
@@ -166,8 +166,10 @@ export default function GameScreen({onRestart}) {
 
                 return (
                     <View style={styles.card}>
+                        {!isWin && <Text style={styles.resultText}>The game is over</Text>}
                         <Image source={imageSource} style={styles.image}/>
                         <Text style={styles.resultText}>{feedbackMessage}</Text>
+                        {isWin && <Text style={styles.resultText}>Attempts used {5 - attemptsLeft}</Text>}
                         <TouchableOpacity onPress={handleNewGame} style={styles.button}>
                             <Text style={styles.buttonText}> NEW GAME</Text>
                         </TouchableOpacity>
@@ -188,7 +190,7 @@ export default function GameScreen({onRestart}) {
             }
 
             if (!guessResultDisplay && !isGameOver) {
-                    return (
+                return (
                     <View style={styles.card}>
                         <Text style={styles.title}>Guess the Number</Text>
                         <TextInput
@@ -217,10 +219,10 @@ export default function GameScreen({onRestart}) {
                             </TouchableOpacity>
                         </View>
                     </View>);
-                } else {
+            } else {
                 return (
                     <View style={styles.card}>
-                        <Text style={styles.title} >You did not guess correct!</Text>
+                        <Text style={styles.title}>You did not guess correct!</Text>
                         <Text style={styles.buttonText}>
                             {feedbackMessage}
                         </Text>
