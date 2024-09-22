@@ -27,25 +27,24 @@ export default function App() {
 
         <LinearGradientBackground>
             <View>
-                <GameScreen onRestart={onRestart}/>
-                {/*{!confirmVisible && !gameVisible && (*/}
-                {/*    <StartScreen handleStart={handleStart} />*/}
-                {/*)}*/}
-                {/*{confirmVisible && !gameVisible && (*/}
-                {/*    <Confirm*/}
-                {/*        name={user.name}*/}
-                {/*        email={user.email}*/}
-                {/*        phoneNumber={user.phoneNumber}*/}
-                {/*        handleBackToStart={() => setConfirmVisible(false)}*/}
-                {/*        handleJumpToGame={() => {*/}
-                {/*            setConfirmVisible(false);*/}
-                {/*            setGameVisible(true);*/}
-                {/*        }}*/}
-                {/*    />*/}
-                {/*)}*/}
-                {/*{gameVisible && (*/}
-                {/*    <GameScreen onRestart={handleRestart} />*/}
-                {/*)}*/}
+                {!confirmVisible && !gameVisible && (
+                    <StartScreen handleStart={handleStart} />
+                )}
+                {confirmVisible && !gameVisible && (
+                    <Confirm
+                        name={user.name}
+                        email={user.email}
+                        phoneNumber={user.phoneNumber}
+                        handleBackToStart={() => setConfirmVisible(false)}
+                        handleJumpToGame={() => {
+                            setConfirmVisible(false);
+                            setGameVisible(true);
+                        }}
+                    />
+                )}
+                {gameVisible && (
+                    <GameScreen onRestart={onRestart} />
+                )}
             </View>
         </LinearGradientBackground>
 

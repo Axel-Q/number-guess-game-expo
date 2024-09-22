@@ -17,10 +17,10 @@ import LinearGradientBackground from "../components/LinearGradientBackground";
 import React, {useState, useEffect, useRef, useCallback} from "react";
 
 const getRandomNum = () => {
-    return Math.floor(Math.random() * 100) + 1;
+    return 2;
 };
 
-export default function GameScreen({onRestart, onNewGame}) {
+export default function GameScreen({onRestart}) {
     const [gameState, setGameState] = useState({
         targetNumber: getRandomNum(),
         userGuess: "",
@@ -30,6 +30,7 @@ export default function GameScreen({onRestart, onNewGame}) {
         hasUsedHint: false,
         hintMessage: "",
         feedbackMessage: null,
+        guessResultDisplay: false,
     });
     const timerRef = useRef(null);
     useEffect(() => {
@@ -76,13 +77,6 @@ export default function GameScreen({onRestart, onNewGame}) {
             userGuess: text,
         }));
     };
-    const handleResetGuess = () => {
-        setGameState((prevState) => ({
-            ...prevState,
-            userGuess: "",
-            feedbackMessage: null,
-        }));
-    };
     const handleEndGame = () => {
         setGameState((prevState) => ({
             ...prevState,
@@ -105,11 +99,8 @@ export default function GameScreen({onRestart, onNewGame}) {
     };
     const handleGuess = () => {
         const guess = parseInt(gameState.userGuess, 10);
-        if (isNaN(guess)) {
-            setGameState((prevState) => ({
-                ...prevState,
-                feedbackMessage: "Please enter a valid number.",
-            }));
+        if (isNaN(guess) || guess < 1 || guess > 100) {
+            Alert.alert("Invalid Number", "Please enter a valid number between 1 and 100.");
             return;
         }
 
@@ -122,22 +113,38 @@ export default function GameScreen({onRestart, onNewGame}) {
             }));
         } else {
             const newAttemptsLeft = gameState.attemptsLeft - 1;
-            let feedback = guess > gameState.targetNumber ? "Too high!" : "Too low!";
+            let feedback = guess > gameState.targetNumber ? "You should guess lower!" : "You should guess higher!";
             if (newAttemptsLeft === 0) {
                 clearInterval(timerRef.current);
                 feedback = "You've run out of attempts!";
             }
-
             setGameState((prevState) => ({
-                ...prevState,
-                attemptsLeft: newAttemptsLeft,
-                feedbackMessage: feedback,
-                isGameOver: newAttemptsLeft === 0,
-            }));
+                    ...prevState,
+                    attemptsLeft: newAttemptsLeft,
+                    feedbackMessage: feedback,
+                    isGameOver: newAttemptsLeft === 0,
+                    guessResultDisplay: true,
+                }
+
+            ));
         }
     };
+    const handleGuessAgain = () => {
+        setGameState((prevState) => ({
+            ...prevState,
+            userGuess: "",
+            feedbackMessage: null,
+            guessResultDisplay: false,
+        }));
 
+    }
 
+    const handleStartGame = () => {
+        setGameState((prevState) => ({
+            ...prevState,
+            hasGameStarted: true,
+        }));
+    };
     const {
         userGuess,
         attemptsLeft,
@@ -146,71 +153,88 @@ export default function GameScreen({onRestart, onNewGame}) {
         hintMessage,
         feedbackMessage,
         hasGameStarted,
+        guessResultDisplay,
     } = gameState;
-    const renderGameContent = () => {
-        if (isGameOver) {
-            const isWin =
-                feedbackMessage && feedbackMessage.startsWith("You guessed correctly");
-            const imageSource = isWin
-                ? {uri: `https://picsum.photos/id/${gameState.targetNumber}/100/100`}
-                : require("../assets/sad_smiley.png");
 
-            return (
-                <View style={styles.card}>
-                    <Image source={imageSource} style={styles.image}/>
-                    <Text style={styles.resultText}>{feedbackMessage}</Text>
-                    <TouchableOpacity onPress={handleNewGame} style={styles.button}>
-                        <Text style={styles.buttonText}>START NEW GAME</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-        } else if (!hasGameStarted) {
-            return (
-                <View style={styles.card}>
-                    <Text style={styles.title}>Guess the Number</Text>
-                    <Text style={styles.instructions}>
-                        Guess the number between 1 and 100. That is multiple of 9.
-                    </Text>
-                    <TouchableOpacity onPress={renderGameContent} style={styles.button}>
-                        <Text style={styles.buttonText}>START</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-        } else {
-            return (
-                <View style={styles.card}>
-                    <Text style={styles.title}>Guess the Number</Text>
-                    <TextInput
-                        style={styles.input}
-                        keyboardType="number-pad"
-                        maxLength={3}
-                        onChangeText={handleInputChange}
-                        value={userGuess}
-                    />
-                    <Text style={styles.infoText}>Time Left: {timeLeft}s</Text>
-                    <Text style={styles.infoText}>Attempts Left: {attemptsLeft}</Text>
-                    {hintMessage ? (
-                        <Text style={styles.hintText}>{hintMessage}</Text>
-                    ) : null}
-                    {feedbackMessage ? (
-                        <Text style={styles.hintText}>{feedbackMessage}</Text>
-                    ) : null}
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={handleHint}
-                            disabled={gameState.hasUsedHint}
-                        >
-                            <Text style={styles.buttonText}>USE A HINT</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.button} onPress={handleGuess}>
-                            <Text style={styles.buttonText}>SUBMIT GUESS</Text>
+    const renderGameContent = () => {
+            if (isGameOver) {
+                const isWin =
+                    feedbackMessage && feedbackMessage.startsWith("You guessed correctly");
+                const imageSource = isWin
+                    ? {uri: `https://picsum.photos/id/${gameState.targetNumber}/100/100`}
+                    : require("../assets/sad_smiley.png");
+
+                return (
+                    <View style={styles.card}>
+                        <Image source={imageSource} style={styles.image}/>
+                        <Text style={styles.resultText}>{feedbackMessage}</Text>
+                        <TouchableOpacity onPress={handleNewGame} style={styles.button}>
+                            <Text style={styles.buttonText}> NEW GAME</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
-            );
+                );
+            }
+
+            if (!hasGameStarted) {
+                return (
+                    <View style={styles.card}>
+                        <Text style={styles.title}>
+                            Guess the number between 1 and 100. That is multiple of 9.</Text>
+                        <TouchableOpacity onPress={handleStartGame} style={styles.button}>
+                            <Text style={styles.buttonText}>START</Text>
+                        </TouchableOpacity>
+                    </View>
+                );
+            }
+
+            if (!guessResultDisplay && !isGameOver) {
+                    return (
+                    <View style={styles.card}>
+                        <Text style={styles.title}>Guess the Number</Text>
+                        <TextInput
+                            style={styles.input}
+                            keyboardType="number-pad"
+                            maxLength={3}
+                            onChangeText={handleInputChange}
+                            value={userGuess}
+                        />
+                        <Text style={styles.infoText}>Time Left: {timeLeft}s</Text>
+                        <Text style={styles.infoText}>Attempts Left: {attemptsLeft}</Text>
+                        {hintMessage ? (
+                            <Text style={styles.hintText}>{hintMessage}</Text>
+                        ) : null}
+
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity
+                                style={gameState.hasUsedHint ? styles.buttonDisabled : styles.button}
+                                onPress={handleHint}
+                                disabled={gameState.hasUsedHint}
+                            >
+                                <Text style={styles.buttonText}>USE A HINT</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button} onPress={handleGuess}>
+                                <Text style={styles.buttonText}>SUBMIT GUESS</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>);
+                } else {
+                return (
+                    <View style={styles.card}>
+                        <Text style={styles.title} >You did not guess correct!</Text>
+                        <Text style={styles.buttonText}>
+                            {feedbackMessage}
+                        </Text>
+                        <TouchableOpacity onPress={handleGuessAgain} style={styles.button}>
+                            <Text style={styles.buttonText}>TRY AGAIN</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleEndGame} style={styles.button}>
+                            <Text style={styles.buttonText}>END GAME</Text>
+                        </TouchableOpacity>
+                    </View>);
+
+            }
         }
-    };
+    ;
 
 
     return (
@@ -274,12 +298,11 @@ const styles = StyleSheet.create({
     },
     infoText: {
         fontSize: 16,
-        color: Colors.grey,
         marginBottom: 10,
     },
     hintText: {
         fontSize: 16,
-        color: Colors.grey,
+        color: Colors.red,
         marginBottom: 10,
         textAlign: "center",
     },
@@ -309,5 +332,9 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         color: Colors.primary,
         textAlign: "center",
+    },
+    hasUsedHint: {
+        backgroundColor: Colors.gray,
+        color: Colors.red,
     },
 });
