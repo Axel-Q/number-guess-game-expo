@@ -1,8 +1,38 @@
+/**
+ * Confirm.js
+ *
+ * This file contains the Confirm component, which serves as a confirmation
+ * screen for the user to verify the information they've entered before
+ * proceeding to the game. It displays the user's name, email, and phone number,
+ * and provides options to go back and edit the information or continue to the game.
+ *
+ * Features:
+ * - Displays user-entered information for confirmation.
+ * - Provides buttons to navigate back to the start screen or proceed to the game.
+ * - Utilizes a modal to overlay the confirmation screen.
+ * - Applies consistent styling and a linear gradient background.
+ *
+ * @format
+ * @flow
+ */
+
+
 import React from "react";
 import {Button, Modal, Text, View, StyleSheet} from "react-native";
 import Colors from "../helperFile/colors";
 import LinearGradientBackground from "../components/LinearGradientBackground";
 
+
+/**
+ * Confirm component: Displays a confirmation screen with user information.
+ * @param {object} props - Component props.
+ * @param {string} props.name - User's name.
+ * @param {string} props.email - User's email.
+ * @param {string} props.phoneNumber - User's phone number.
+ * @param {function} props.handleBackToStart - Function to navigate back to the start screen.
+ * @param {function} props.handleJumpToGame - Function to proceed to the game screen.
+ * @returns {JSX.Element} The rendered component.
+ */
 export default function Confirm({name, email, phoneNumber, handleBackToStart, handleJumpToGame}) {
     return (
 

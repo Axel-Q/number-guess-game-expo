@@ -1,3 +1,27 @@
+/**
+ * GameScreen.js
+ *
+ * This file contains the GameScreen component for a number guessing game.
+ * The game requires the user to guess a number between 1 and 100 that is
+ * a multiple of the last digit of their phone number. The user has 60 seconds
+ * and 4 attempts to guess the correct number. They can also use a hint once
+ * during the game.
+ *
+ * Features:
+ * - Input validation for the user's guess.
+ * - Timer countdown from 60 seconds.
+ * - Limited number of attempts (4 attempts).
+ * - Option to use a hint to narrow down the range.
+ * - Feedback messages after each guess.
+ * - Option to restart the game.
+ *
+ * The component utilizes React hooks such as useState, useEffect, and useCallback
+ * to manage state and side effects.
+ *
+ * @format
+ * @flow
+ */
+
 import Colors from "../helperFile/colors";
 import {
     View,
@@ -40,7 +64,7 @@ const getMultiplesArray = (phoneNumber) => {
  */
 const getRandomNum = (multiplesArray) => {
     const randomIndex = Math.floor(Math.random() * multiplesArray.length);
-        console.log("tagretNumber", multiplesArray[randomIndex]);
+    console.log("tagretNumber", multiplesArray[randomIndex]);
     return multiplesArray[randomIndex];
 
 };
@@ -68,7 +92,7 @@ export default function GameScreen({onRestart, phoneNumber}) {
     });
     const timerRef = useRef(null);
 
-       /**
+    /**
      * useEffect hook to handle the timer countdown.
      * The timer starts when the game starts and stops when the game is over.
      */
@@ -94,6 +118,11 @@ export default function GameScreen({onRestart, phoneNumber}) {
         }
         return () => clearInterval(timerRef.current);
     }, [gameState.isGameOver, gameState.hasGameStarted]);
+
+    /**
+     * Provides a hint to the user based on the target number's range.
+     * Sets hasUsedHint to true to prevent multiple hints.
+     */
     const handleHint = useCallback(() => {
         if (gameState.hasUsedHint) return;
         const hint =
@@ -110,12 +139,22 @@ export default function GameScreen({onRestart, phoneNumber}) {
             hintMessage: hint,
         }));
     }, [gameState.hasUsedHint, gameState.targetNumber]);
+
+    /**
+     * Updates the user's guess in the game state as they type.
+     * @param {string} text - The current text input value.
+     */
     const handleInputChange = (text) => {
         setGameState((prevState) => ({
             ...prevState,
             userGuess: text,
         }));
     };
+
+    /**
+     * Ends the game when the user chooses to give up.
+     * Sets isGameOver to true and displays a feedback message.
+     */
     const handleEndGame = () => {
         setGameState((prevState) => ({
             ...prevState,
@@ -123,6 +162,10 @@ export default function GameScreen({onRestart, phoneNumber}) {
             isGameOver: true,
         }));
     };
+    /**
+     * Starts a new game by resetting the game state.
+     * Generates a new target number based on the last digit of the phone number.
+     */
     const handleNewGame = () => {
         const multiplesArray = getMultiplesArray(phoneNumber);
         const newNumber = getRandomNum(multiplesArray);
@@ -138,6 +181,10 @@ export default function GameScreen({onRestart, phoneNumber}) {
             hasGameStarted: true,
         });
     };
+    /**
+     * Handles the user's guess when they submit it.
+     * Validates the input and updates the game state accordingly.
+     */
     const handleGuess = () => {
         const guess = parseInt(gameState.userGuess, 10);
         if (isNaN(guess) || guess < 1 || guess > 100) {
@@ -169,6 +216,9 @@ export default function GameScreen({onRestart, phoneNumber}) {
             ));
         }
     };
+    /**
+     * Allows the user to guess again by resetting relevant parts of the game state.
+     */
     const handleGuessAgain = () => {
         setGameState((prevState) => ({
             ...prevState,
@@ -179,6 +229,9 @@ export default function GameScreen({onRestart, phoneNumber}) {
 
     }
 
+     /**
+     * Starts the game by generating the target number and setting hasGameStarted to true.
+     */
     const handleStartGame = () => {
         const multiplesArray = getMultiplesArray(phoneNumber);
         const targetNumber = getRandomNum(multiplesArray);
@@ -188,6 +241,7 @@ export default function GameScreen({onRestart, phoneNumber}) {
             targetNumber: targetNumber,
         }));
     };
+    // Destructure game state variables for easier access
     const {
         userGuess,
         attemptsLeft,
@@ -199,6 +253,11 @@ export default function GameScreen({onRestart, phoneNumber}) {
         guessResultDisplay,
     } = gameState;
 
+      /**
+     * Renders the main content of the game based on the current game state.
+     * Handles different game stages: before start, during the game, and game over.
+     * @returns {JSX.Element} The game content to render.
+     */
     const renderGameContent = () => {
             if (isGameOver) {
                 const isWin =
@@ -235,7 +294,8 @@ export default function GameScreen({onRestart, phoneNumber}) {
             if (!guessResultDisplay && !isGameOver) {
                 return (
                     <View style={styles.card}>
-                        <Text style={styles.title}>Guess the number between 1 and 100. That is multiple of {phoneNumber[9]} (inclusive)</Text>
+                        <Text style={styles.title}>Guess the number between 1 and 100. That is multiple
+                            of {phoneNumber[9]} (inclusive)</Text>
                         <TextInput
                             style={[styles.input, styles.inputUnderline]}
                             placeholder="Enter your guess"

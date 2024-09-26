@@ -1,3 +1,19 @@
+/**
+ * Colors.js
+ *
+ * This file contains the definition of color constants used throughout the application.
+ * Defining colors in a single file helps maintain consistency and makes it easier to update colors globally.
+ * Colors are defined using either RGB or RGBA notation.
+ *
+ * Features:
+ * - Centralized color definitions for consistent styling.
+ * - Includes colors for primary, secondary, disabled states, gradients, and more.
+ * - Facilitates easy theming and color management across the app.
+ *
+ * @format
+ * @flow
+ */
+
 const Colors = {
     gray: 'rgba(128, 128, 128,1)',
     blue: 'rgb(93,216,255)',
