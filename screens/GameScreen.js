@@ -16,15 +16,46 @@ import {
 import LinearGradientBackground from "../components/LinearGradientBackground";
 import React, {useState, useEffect, useRef, useCallback} from "react";
 
-const multiplesOfNine = [9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99];
-const getRandomNum = () => {
-    const randomIndex = Math.floor(Math.random() * multiplesOfNine.length);
-    return multiplesOfNine[randomIndex];
+/**
+ * Generates an array of multiples of the last digit of the phone number between 1 and 100.
+ * @param {string|number} phoneNumber - The user's phone number.
+ * @returns {number[]} An array of multiples.
+ */
+const getMultiplesArray = (phoneNumber) => {
+    const lastDigit = parseInt(phoneNumber.toString().slice(-1), 10);
+    console.log('lastDigit', lastDigit);
+    const multiples = [];
+    for (let i = lastDigit; i <= 100; i += lastDigit) {
+        multiples.push(i);
+    }
+    console.log('multiples', multiples);
+    return multiples;
 };
 
-export default function GameScreen({onRestart}) {
+
+/**
+ * Selects a random number from the array of multiples.
+ * @param {number[]} multiplesArray - Array of multiples.
+ * @returns {number} A random number from the multiples array.
+ */
+const getRandomNum = (multiplesArray) => {
+    const randomIndex = Math.floor(Math.random() * multiplesArray.length);
+        console.log("tagretNumber", multiplesArray[randomIndex]);
+    return multiplesArray[randomIndex];
+
+};
+
+/**
+ * GameScreen component: A number guessing game where the user tries to guess a number
+ * that is a multiple of the last digit of their phone number between 1 and 100.
+ * @param {object} props - Component props.
+ * @param {function} props.onRestart - Function to restart the game.
+ * @param {string|number} props.phoneNumber - The user's phone number.
+ * @returns {JSX.Element} The rendered component.
+ */
+export default function GameScreen({onRestart, phoneNumber}) {
     const [gameState, setGameState] = useState({
-        targetNumber: getRandomNum(),
+        targetNumber: null,
         userGuess: "",
         attemptsLeft: 4,
         timeLeft: 60,
@@ -33,10 +64,16 @@ export default function GameScreen({onRestart}) {
         hintMessage: "",
         feedbackMessage: null,
         guessResultDisplay: false,
+        hasGameStarted: false,
     });
     const timerRef = useRef(null);
+
+       /**
+     * useEffect hook to handle the timer countdown.
+     * The timer starts when the game starts and stops when the game is over.
+     */
     useEffect(() => {
-        if (!gameState.isGameOver) {
+        if (!gameState.isGameOver && gameState.hasGameStarted) {
             timerRef.current = setInterval(() => {
                 setGameState((prevState) => {
                     if (prevState.timeLeft <= 1) {
@@ -56,7 +93,7 @@ export default function GameScreen({onRestart}) {
             }, 1000);
         }
         return () => clearInterval(timerRef.current);
-    }, [gameState.isGameOver]);
+    }, [gameState.isGameOver, gameState.hasGameStarted]);
     const handleHint = useCallback(() => {
         if (gameState.hasUsedHint) return;
         const hint =
@@ -87,8 +124,10 @@ export default function GameScreen({onRestart}) {
         }));
     };
     const handleNewGame = () => {
+        const multiplesArray = getMultiplesArray(phoneNumber);
+        const newNumber = getRandomNum(multiplesArray);
         setGameState({
-            targetNumber: getRandomNum(),
+            targetNumber: newNumber,
             userGuess: "",
             attemptsLeft: 4,
             timeLeft: 60,
@@ -96,7 +135,7 @@ export default function GameScreen({onRestart}) {
             hasUsedHint: false,
             hintMessage: "",
             feedbackMessage: null,
-            hasGameStarted: false,
+            hasGameStarted: true,
         });
     };
     const handleGuess = () => {
@@ -127,7 +166,6 @@ export default function GameScreen({onRestart}) {
                     isGameOver: newAttemptsLeft === 0,
                     guessResultDisplay: true,
                 }
-
             ));
         }
     };
@@ -142,9 +180,12 @@ export default function GameScreen({onRestart}) {
     }
 
     const handleStartGame = () => {
+        const multiplesArray = getMultiplesArray(phoneNumber);
+        const targetNumber = getRandomNum(multiplesArray);
         setGameState((prevState) => ({
             ...prevState,
             hasGameStarted: true,
+            targetNumber: targetNumber,
         }));
     };
     const {
@@ -183,7 +224,7 @@ export default function GameScreen({onRestart}) {
                 return (
                     <View style={styles.card}>
                         <Text style={styles.title}>
-                            Guess the number between 1 and 100. That is multiple of 9.</Text>
+                            Guess the number between 1 and 100. That is multiple of {phoneNumber[9]} (inclusive).</Text>
                         <TouchableOpacity onPress={handleStartGame} style={styles.button}>
                             <Text style={styles.buttonText}>START</Text>
                         </TouchableOpacity>
@@ -194,7 +235,7 @@ export default function GameScreen({onRestart}) {
             if (!guessResultDisplay && !isGameOver) {
                 return (
                     <View style={styles.card}>
-                        <Text style={styles.title}>Guess the number between 1 and 100. That is multiple of 9</Text>
+                        <Text style={styles.title}>Guess the number between 1 and 100. That is multiple of {phoneNumber[9]} (inclusive)</Text>
                         <TextInput
                             style={[styles.input, styles.inputUnderline]}
                             placeholder="Enter your guess"
@@ -274,16 +315,17 @@ const styles = StyleSheet.create({
         padding: 75,
         borderRadius: 10,
         backgroundColor: Colors.blue,
+        opacity: 0.9,
         alignItems: "center",
         ...Platform.select({
             ios: {
                 shadowColor: Colors.primary,
-                shadowOffset: {width: 0, height: 2},
+                shadowOffset: {width: 2, height: 2},
                 shadowOpacity: 0.8,
                 shadowRadius: 2,
             },
             android: {
-                elevation: 5,
+                elevation: 15,
             },
         }),
     },

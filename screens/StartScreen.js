@@ -8,7 +8,7 @@ export default function StartScreen({handleStart, user}) {
     const [name, setName] = useState(user.name || "");
     const [email, setEmail] = useState(user.email || "");
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber || "");
-    const [notRobot, setNotRobot] = React.useState(false);
+    const [notRobot, setNotRobot] = React.useState(user.notRobot);
     const [nameError, setNameError] = React.useState("");
     const [emailError, setEmailError] = React.useState("");
     const [phoneNumberError, setPhoneNumberError] = React.useState("");
@@ -86,7 +86,6 @@ export default function StartScreen({handleStart, user}) {
             setButtonDisabled(true);
     }, [notRobot]);
 
-
     return (
         <View>
             <Text style={styles.title}>Welcome to Axel's App</Text>
@@ -158,17 +157,16 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         // Shadow for iOS
         shadowColor: "#000",
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.25,
+        shadowOffset: {width: 1, height: 2},
+        shadowOpacity: 0.8,
         shadowRadius: 3.84,
         // Elevation for Android
-        elevation: 15,
+        elevation: 20,
         height: 500,
         width: 300,
         paddingHorizontal: 20,
         justifyContent: 'center',
         opacity: 0.9,
-
     },
     inputContainer: {
         marginVertical: 20,

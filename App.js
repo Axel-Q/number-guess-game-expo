@@ -9,15 +9,15 @@ import LinearGradientBackground from "./components/LinearGradientBackground";
 
 
 export default function App() {
-    const [user, setUser] = React.useState({name: "", email: "", phoneNumber: ""});
+    const [user, setUser] = React.useState({name: "", email: "", phoneNumber: "", notRobot: false});
     const [confirmVisible, setConfirmVisible] = React.useState(false);
     const [gameVisible, setGameVisible] = React.useState(false);
     const handleStart = (name, email, phoneNumber) => {
-        setUser({name: name, email: email, phoneNumber: phoneNumber});
+        setUser({name: name, email: email, phoneNumber: phoneNumber, notRobot: true});
         setConfirmVisible(true);
     }
     const onRestart = () => {
-        setUser({name: "", email: "", phoneNumber: ""});
+        setUser({name: "", email: "", phoneNumber: "", notRobot: false});
         setConfirmVisible(false);
         setGameVisible(false);
     }
@@ -26,8 +26,8 @@ export default function App() {
     return (
 
         <LinearGradientBackground>
-            <View>
-                {!confirmVisible && !gameVisible && (
+            <View >
+                {!gameVisible && (
                     <StartScreen handleStart={handleStart} user={user}/>
                 )}
                 {confirmVisible && !gameVisible && (
@@ -35,7 +35,9 @@ export default function App() {
                         name={user.name}
                         email={user.email}
                         phoneNumber={user.phoneNumber}
-                        handleBackToStart={() => {setConfirmVisible(false)}}
+                        handleBackToStart={() => {
+                            setConfirmVisible(false)
+                        }}
                         handleJumpToGame={() => {
                             setConfirmVisible(false);
                             setGameVisible(true);
@@ -43,12 +45,10 @@ export default function App() {
                     />
                 )}
                 {gameVisible && (
-                    <GameScreen onRestart={onRestart} />
+                    <GameScreen onRestart={onRestart} phoneNumber={user.phoneNumber}/>
                 )}
             </View>
         </LinearGradientBackground>
-
-
     )
         ;
 }

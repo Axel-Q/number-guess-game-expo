@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.yellow,
         alignItems: 'center',
         justifyContent: 'center',
-        opacity: 0.9,
+        opacity: 0.85,
     },
     base: {
         flex: 1,
@@ -28,9 +28,7 @@ const styles = StyleSheet.create({
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-
     },
-
     children: {
         flex: 1,
         alignItems: 'center',

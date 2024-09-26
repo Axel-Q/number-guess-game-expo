@@ -10,6 +10,7 @@ const Colors = {
     gradient: ['rgba(0,0,0,0.7)', 'transparent'],
     yellow: 'rgb(255,220,0)',
     blueGreen: 'rgb(0,151,131)',
+    black: 'rgb(0,0,0)',
 }
 
 export default Colors
