@@ -20,6 +20,7 @@ import {StatusBar, View, Text, StyleSheet, TextInput, Button} from "react-native
 import Colors from "../helperFile/colors";
 import CustomizedButton from "../components/CustomizedButton";
 import CheckRobotBox from "../components/CheckRobotBox";
+import Card from "../components/Card";
 
 
 /**
@@ -171,7 +172,7 @@ export default function StartScreen({handleStart, user}) {
     return (
         <View>
             <Text style={styles.title}>Welcome to Axel's App</Text>
-            <View style={styles.card}>
+            <Card>
                 <StatusBar style="auto"/>
                 <View style={styles.inputContainer}>
                     <Text>Name</Text>
@@ -222,7 +223,8 @@ export default function StartScreen({handleStart, user}) {
                     <CustomizedButton title="Reset" onPress={clearForm} backgroundColor={Colors.primary}/>
                     <CustomizedButton title="Register" onPress={handleFormSubmission} disabled={buttonDisabled}/>
                 </View>
-            </View>
+            </Card>
+
         </View>
     );
 }
