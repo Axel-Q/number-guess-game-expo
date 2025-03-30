@@ -1,6 +1,6 @@
 # Number Guessing Game
 
-## 📝 Assignment Overview
+## 📝 Overview
 
 This project is a number guessing game built using React Native with Expo. The app functions on both iOS and Android platforms and includes three interactive screens with conditional rendering instead of navigation libraries to control the flow of the game.
 
